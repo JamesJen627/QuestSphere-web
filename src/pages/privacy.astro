@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="隐私政策 — 题域 QuestSphere" description="题域 QuestSphere 隐私政策（内测版占位）">
+  <Header slot="header" />
+
+  <article class="prose mx-auto max-w-3xl px-4 py-16">
+    <h1>隐私政策</h1>
+    <p class="text-sm text-amber-700">内测版占位文档，正式上架前将更新完整条款。</p>
+
+    <h2>我们收集什么</h2>
+    <p>
+      题域 Android App 在本地存储你的刷题进度、错题与导入题库。若启用云同步或公开包功能，会通过 Supabase
+      同步必要数据（如设备标识、公开包元数据），不会收集与服务无关的个人信息。
+    </p>
+
+    <h2>官网</h2>
+    <p>
+      本网站为静态展示与公开包预览，通过 Supabase 只读 API 获取已上架公开包信息，不要求用户登录，不存储访客个人信息。
+    </p>
+
+    <h2>联系我们</h2>
+    <p>
+      如有隐私相关问题，请发送邮件至
+      <a href="mailto:feedback@questsphere.app">feedback@questsphere.app</a>。
+    </p>
+  </article>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  @reference "../styles/global.css";
+
+  .prose h1 {
+    @apply text-3xl font-bold text-slate-900;
+  }
+  .prose h2 {
+    @apply mt-10 text-xl font-semibold text-slate-800;
+  }
+  .prose p {
+    @apply text-slate-600 leading-7;
+  }
+  .prose a {
+    @apply font-medium text-blue-600 hover:text-blue-700;
+  }
+</style>

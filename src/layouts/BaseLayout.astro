@@ -4,15 +4,20 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  ogType?: string;
+  ogImage?: string;
 }
 
 const {
   title = '题域 QuestSphere',
   description = '导入即练、发现共享题库 — Android 刷题 App',
+  ogType = 'website',
+  ogImage,
 } = Astro.props;
 
 const siteUrl = import.meta.env.PUBLIC_SITE_URL ?? Astro.url.origin;
 const canonical = new URL(Astro.url.pathname, siteUrl).href;
+const image = ogImage ?? new URL('/og-image.svg', siteUrl).href;
 ---
 
 <!doctype html>
@@ -25,9 +30,16 @@ const canonical = new URL(Astro.url.pathname, siteUrl).href;
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <meta property="og:site_name" content="题域 QuestSphere" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <title>{title}</title>
   </head>
   <body class="min-h-screen bg-slate-50 text-slate-900 antialiased">

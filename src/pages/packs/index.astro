@@ -1,0 +1,108 @@
+---
+export const prerender = false;
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import { listPublicPacks } from '../../lib/supabase';
+import { formatDateZh } from '../../lib/format';
+
+let packs = [];
+let errorMessage: string | null = null;
+let isConfigError = false;
+
+try {
+  packs = await listPublicPacks(50);
+} catch (error) {
+  errorMessage = error instanceof Error ? error.message : '加载失败';
+  isConfigError = errorMessage.includes('环境变量');
+}
+---
+
+<BaseLayout
+  title="发现公开包 — 题域 QuestSphere"
+  description="浏览题域发现页中的公开题库，预览题目并在 App 中订阅导入。"
+>
+  <Header slot="header" />
+
+  <section class="mx-auto max-w-5xl px-4 py-16">
+    <div class="max-w-2xl">
+      <p class="text-sm font-medium text-blue-600">发现题库</p>
+      <h1 class="mt-2 text-3xl font-bold text-slate-900">公开包目录</h1>
+      <p class="mt-4 text-lg text-slate-600">
+        浏览已上架的公开题库。点击可预览前 3 题；完整刷题与订阅导入请在题域 App 内完成。
+      </p>
+    </div>
+
+    {
+      errorMessage ? (
+        <div class="mt-10">
+          <EmptyState
+            title={isConfigError ? '服务配置不完整' : '无法加载公开包列表'}
+            description={
+              isConfigError
+                ? '站点尚未配置 Supabase 连接。若你是维护者，请配置 PUBLIC_SUPABASE_URL 与 PUBLIC_SUPABASE_ANON_KEY。'
+                : errorMessage
+            }
+          />
+        </div>
+      ) : packs.length === 0 ? (
+        <div class="mt-10">
+          <EmptyState
+            title="暂无公开包"
+            description="目前还没有已上架的公开包。你可以稍后再来，或先了解 App 与导入文档。"
+          />
+        </div>
+      ) : (
+        <ul class="mt-10 grid gap-4 sm:grid-cols-2">
+          {
+            packs.map((pack) => (
+              <li>
+                <a
+                  href={`/pack/${pack.pack_id}`}
+                  class="block rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-blue-200 hover:shadow-md"
+                >
+                  <h2 class="text-lg font-semibold text-slate-900">{pack.title}</h2>
+                  {pack.description && (
+                    <p class="mt-2 line-clamp-2 text-sm text-slate-600">{pack.description}</p>
+                  )}
+                  <div class="mt-4 flex flex-wrap gap-2 text-xs text-slate-500">
+                    {pack.author_nickname && <span>{pack.author_nickname}</span>}
+                    {pack.question_count != null && <span>{pack.question_count} 题</span>}
+                    {pack.version != null && <span>v{pack.version}</span>}
+                    {formatDateZh(pack.updated_at) && (
+                      <span>{formatDateZh(pack.updated_at)}</span>
+                    )}
+                  </div>
+                  {pack.tags && pack.tags.length > 0 && (
+                    <div class="mt-3 flex flex-wrap gap-1.5">
+                      {pack.tags.slice(0, 4).map((tag) => (
+                        <span class="rounded-full bg-blue-50 px-2 py-0.5 text-xs text-blue-700">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      )
+    }
+  </section>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

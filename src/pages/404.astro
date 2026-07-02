@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import EmptyState from '../components/EmptyState.astro';
+
+Astro.response.status = 404;
+---
+
+<BaseLayout title="页面未找到 — 题域" description="您访问的页面不存在">
+  <Header slot="header" />
+
+  <section class="mx-auto max-w-3xl px-4 py-16">
+    <EmptyState
+      title="404 — 页面未找到"
+      description="您访问的链接不存在或已失效。可以返回首页，或浏览公开包与文档。"
+    />
+  </section>
+
+  <Footer slot="footer" />
+</BaseLayout>

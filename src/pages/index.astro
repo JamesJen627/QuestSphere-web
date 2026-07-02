@@ -10,7 +10,13 @@ const features = [
   '学习小组协作编辑与 PK',
 ];
 
-const pipeline = ['PDF 可搜索化', 'DeepTutor 个性化出题', 'Excel 导出', '题域 Android 刷题', 'Supabase 公开包/云同步'];
+const pipeline = [
+  '整理 PDF 资料',
+  '智能个性化出题',
+  '导出 Excel 题库',
+  '导入题域刷题',
+  '分享公开题库',
+];
 ---
 
 <BaseLayout>
@@ -23,14 +29,20 @@ const pipeline = ['PDF 可搜索化', 'DeepTutor 个性化出题', 'Excel 导出
         题域 — 导入即练，发现共享题库
       </h1>
       <p class="mt-6 text-lg leading-8 text-slate-600">
-        一条龙生态中的「练习与沉淀层」：Excel/DeepTutor 出题 → 题域导入刷题 → 可选发布到发现题库供他人订阅。
+        从出题到刷题的一条龙练习工具：导入 Excel 即可开练，还能发现他人分享的公开题库。
       </p>
       <div class="mt-8 flex flex-wrap gap-4">
         <a
-          href="/download"
+          href="/packs"
           class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
         >
-          下载 Android App
+          浏览公开包
+        </a>
+        <a
+          href="/download"
+          class="rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-600"
+        >
+          了解 Android App
         </a>
         <a
           href="/docs"
@@ -45,6 +57,7 @@ const pipeline = ['PDF 可搜索化', 'DeepTutor 个性化出题', 'Excel 导出
   <section class="border-y border-slate-200 bg-white">
     <div class="mx-auto max-w-5xl px-4 py-12">
       <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">一条龙链路</h2>
+      <p class="mt-2 text-sm text-slate-500">从资料整理到刷题沉淀，题域负责「练」这一环</p>
       <ol class="mt-6 flex flex-wrap gap-3">
         {
           pipeline.map((step, index) => (
