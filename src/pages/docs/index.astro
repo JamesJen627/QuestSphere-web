@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<BaseLayout title="文档 — 题域 QuestSphere" description="Excel 导入说明、FAQ 与一条龙使用指南">
+  <Header slot="header" />
+
+  <article class="mx-auto max-w-3xl px-4 py-16 prose prose-slate">
+    <h1>使用文档</h1>
+    <p>题域是 Android 刷题 App。官网 v1 提供导入说明与 FAQ，完整刷题请在 App 内进行。</p>
+
+    <h2>Excel 导入</h2>
+    <ol>
+      <li>从 DeepTutor 或模板导出 Excel 题库文件。</li>
+      <li>打开题域 App → 导入 Excel，选择分类与批次。</li>
+      <li>开始顺序练习、模考或错题复习。</li>
+    </ol>
+
+    <h2>发现公开包</h2>
+    <p>
+      在 App「小组」页上半区浏览公开包，订阅后写入本地分类。分享链接格式：<code>/pack/[packId]</code>。
+    </p>
+
+    <h2>FAQ</h2>
+    <dl>
+      <dt><strong>公开包与小组有什么区别？</strong></dt>
+      <dd>公开包是只读快照；小组需邀请码，可协作编辑。</dd>
+      <dt><strong>官网能刷题吗？</strong></dt>
+      <dd>v1 仅提供公开包预览与下载引导，Web 刷题不在当前范围。</dd>
+    </dl>
+  </article>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .prose h1 {
+    @apply text-3xl font-bold text-slate-900;
+  }
+  .prose h2 {
+    @apply mt-10 text-xl font-semibold text-slate-800;
+  }
+  .prose p,
+  .prose li,
+  .prose dd {
+    @apply text-slate-600 leading-7;
+  }
+  .prose ol {
+    @apply mt-4 list-decimal space-y-2 pl-5;
+  }
+  .prose dl {
+    @apply mt-4 space-y-4;
+  }
+  .prose dt {
+    @apply text-slate-800;
+  }
+  .prose code {
+    @apply rounded bg-slate-100 px-1.5 py-0.5 text-sm text-blue-700;
+  }
+</style>
