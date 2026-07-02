@@ -12,9 +12,9 @@ export default defineConfig({
   site: 'https://questsphere-web.vercel.app',
 
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
   },
 
   adapter: vercel(),
-  integrations: [sitemap()]
+  integrations: [sitemap()],
 });

@@ -9,6 +9,7 @@ import { fetchPublicPack } from '../../lib/supabase';
 import { buildPackShareMeta } from '../../lib/pack-meta';
 import { formatDateZh } from '../../lib/format';
 import { stripMarkdownForPreview } from '../../lib/preview';
+import { parsePayloadJson } from '../../lib/payload';
 import type { PublicPackPayload } from '../../types/public-pack';
 
 const { packId } = Astro.params;
@@ -32,7 +33,7 @@ if (!pack && !errorMessage) {
   Astro.response.status = 404;
 }
 
-const payload = pack?.payload_json as PublicPackPayload | undefined;
+const payload = parsePayloadJson(pack?.payload_json);
 const previewQuestions = payload?.questions?.slice(0, 3) ?? [];
 const updatedLabel = formatDateZh(pack?.updated_at);
 const siteUrl = import.meta.env.PUBLIC_SITE_URL ?? Astro.url.origin;
@@ -90,7 +91,11 @@ const pageDescription =
             )}
           </div>
 
-          {previewQuestions.length > 0 && (
+          <p class="mt-6 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-800">
+            本站可预览题库信息与前几道题。完整订阅与刷题需在题域 App 内完成（内测筹备中）。
+          </p>
+
+          {previewQuestions.length > 0 ? (
             <div class="mt-10 space-y-4">
               <h2 class="text-lg font-semibold text-slate-800">题目预览（前 3 题）</h2>
               {previewQuestions.map((question, index) => (
@@ -102,6 +107,8 @@ const pageDescription =
                 </article>
               ))}
             </div>
+          ) : (
+            <p class="mt-10 text-sm text-slate-500">暂无题目预览内容。</p>
           )}
 
           <div class="mt-10 flex flex-wrap gap-3">
@@ -109,7 +116,7 @@ const pageDescription =
               href="/download"
               class="inline-flex rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
             >
-              在题域 App 中订阅
+              了解 App · 内测筹备中
             </a>
             <button
               type="button"

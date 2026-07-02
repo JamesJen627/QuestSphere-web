@@ -17,7 +17,7 @@ const {
 
 const siteUrl = import.meta.env.PUBLIC_SITE_URL ?? Astro.url.origin;
 const canonical = new URL(Astro.url.pathname, siteUrl).href;
-const image = ogImage ?? new URL('/og-image.svg', siteUrl).href;
+const image = ogImage ?? new URL('/og-image.png', siteUrl).href;
 ---
 
 <!doctype html>
@@ -37,9 +37,10 @@ const image = ogImage ?? new URL('/og-image.svg', siteUrl).href;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={image} />
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
     <title>{title}</title>
   </head>
   <body class="min-h-screen bg-slate-50 text-slate-900 antialiased">

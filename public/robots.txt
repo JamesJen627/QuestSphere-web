@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://questsphere-web.vercel.app/sitemap-index.xml
+Sitemap: https://questsphere-web.vercel.app/sitemap-packs.xml
