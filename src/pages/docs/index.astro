@@ -70,11 +70,16 @@ import Footer from '../../components/Footer.astro';
       <li>在题域 App 中选择该文件导入，无需手动改列名（若导出格式已对齐）。</li>
     </ol>
 
-    <h2>发现公开包</h2>
+    <h2 id="subscribe-public-pack">发现与订阅公开包</h2>
     <p>
       在 App「小组」页上半区浏览公开包，订阅后写入本地分类。官网提供
-      <a href="/packs">公开包目录</a> 与分享页 <code>/pack/[packId]</code>，可预览前 3 题。
+      <a href="/packs">公开包目录</a> 与分享页 <code>/pack/[packId]</code>，可预览前 3 题（含选项与解析）。
     </p>
+    <ol>
+      <li>打开题域 App → 进入「小组」页 → 上半区「发现」</li>
+      <li>搜索或浏览公开包，点进详情后选择「订阅并导入」</li>
+      <li>题目写入本地分类（<code>{'public_{packId}'}</code>），即可开始练习</li>
+    </ol>
 
     <h2>故障排查</h2>
     <dl>

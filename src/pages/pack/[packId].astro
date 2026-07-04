@@ -5,12 +5,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import EmptyState from '../../components/EmptyState.astro';
+import PackOnboarding from '../../components/PackOnboarding.astro';
+import PackPreviewQuestion from '../../components/PackPreviewQuestion.astro';
 import { fetchPublicPack } from '../../lib/supabase';
 import { buildPackShareMeta } from '../../lib/pack-meta';
 import { formatDateZh } from '../../lib/format';
-import { stripMarkdownForPreview } from '../../lib/preview';
+import { getPackTypeLabel } from '../../lib/question-preview';
 import { parsePayloadJson } from '../../lib/payload';
-import type { PublicPackPayload } from '../../types/public-pack';
 
 const { packId } = Astro.params;
 
@@ -35,6 +36,7 @@ if (!pack && !errorMessage) {
 
 const payload = parsePayloadJson(pack?.payload_json);
 const previewQuestions = payload?.questions?.slice(0, 3) ?? [];
+const packTypeLabel = getPackTypeLabel(pack?.tags);
 const updatedLabel = formatDateZh(pack?.updated_at);
 const siteUrl = import.meta.env.PUBLIC_SITE_URL ?? Astro.url.origin;
 const shareUrl = new URL(Astro.url.pathname, siteUrl).href;
@@ -91,20 +93,18 @@ const pageDescription =
             )}
           </div>
 
-          <p class="mt-6 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-            本站可预览题库信息与前几道题。完整订阅与刷题需在题域 App 内完成（内测筹备中）。
-          </p>
+          <PackOnboarding packTypeLabel={packTypeLabel} />
 
           {previewQuestions.length > 0 ? (
             <div class="mt-10 space-y-4">
-              <h2 class="text-lg font-semibold text-slate-800">题目预览（前 3 题）</h2>
+              <div>
+                <h2 class="text-lg font-semibold text-slate-800">题目预览（前 3 题）</h2>
+                <p class="mt-1 text-sm text-slate-500">
+                  只读展示题干、选项与解析，不公布正确答案，不支持在线答题。
+                </p>
+              </div>
               {previewQuestions.map((question, index) => (
-                <article class="rounded-xl border border-slate-200 bg-white p-5">
-                  <p class="text-xs font-medium uppercase text-slate-400">第 {index + 1} 题</p>
-                  <p class="mt-2 whitespace-pre-wrap text-slate-800">
-                    {stripMarkdownForPreview(question.question)}
-                  </p>
-                </article>
+                <PackPreviewQuestion question={question} index={index} />
               ))}
             </div>
           ) : (
@@ -113,10 +113,22 @@ const pageDescription =
 
           <div class="mt-10 flex flex-wrap gap-3">
             <a
-              href="/download"
+              href="/packs"
               class="inline-flex rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
             >
+              继续逛精选包
+            </a>
+            <a
+              href="/download"
+              class="inline-flex rounded-lg border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-600"
+            >
               了解 App · 内测筹备中
+            </a>
+            <a
+              href="/#ecosystem"
+              class="inline-flex rounded-lg border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-600"
+            >
+              了解定制服务
             </a>
             <button
               type="button"
