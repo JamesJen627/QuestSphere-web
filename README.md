@@ -2,12 +2,17 @@
 
 题域（QuestSphere）官方站点 — Astro + Tailwind，部署到 Vercel 或 Cloudflare Pages。
 
+**主转化**：用精选公开包让人「刷几道题就懂题域」；完整刷题与订阅在 Android App 内完成。战略与 IA 见 [`docs/website-decisions.md`](docs/website-decisions.md)。
+
 ## 功能（Phase 2.8 v1）
 
-- `/` — 落地页（一条龙生态 + 功能概览）
-- `/docs` — 导入说明与 FAQ
-- `/download` — APK 下载引导
-- `/pack/[packId]` — 公开包只读预览（Supabase anon REST）
+| 路径 | 说明 |
+| --- | --- |
+| `/` | 落地页：生态叙事（`#ecosystem`）+ 主 CTA「体验官方精选题库」 |
+| `/packs` | 官方精选公开包 + 次级全量/搜索 |
+| `/pack/[packId]` | 只读预览（前 3 题含选项与解析）+ onboarding |
+| `/docs` | 导入说明、发现/订阅 FAQ |
+| `/download` | App 下载引导（次级入口，内测期说明） |
 
 ## 本地开发
 
@@ -46,4 +51,5 @@ Vercel / Cloudflare Pages 连接本仓库，Root Directory 为仓库根目录，
 
 ## 相关文档
 
-- 产品规划：`PRDs/1_plan.md`
+- **官网决策单（优先）**：[`docs/website-decisions.md`](docs/website-decisions.md)
+- 产品背景与 API：[`docs/PRDs/1_plan.md`](docs/PRDs/1_plan.md)

@@ -10,49 +10,83 @@ const features = [
   '学习小组协作编辑与 PK',
 ];
 
-const pipeline = [
-  '整理 PDF 资料',
-  '智能个性化出题',
-  '导出 Excel 题库',
-  '导入题域刷题',
-  '分享公开题库',
+const ecosystemSteps = [
+  'PDF 可搜索化',
+  'DeepTutor 部署与定制出题',
+  'Excel 导出补丁',
+  '题域刷题（练）',
+  '公开包订阅',
 ];
 ---
 
-<BaseLayout>
+<BaseLayout
+  title="题域 QuestSphere — 备考一条龙里的刷题与共享层"
+  description="先体验官方精选题库，再决定是否导入自己的 Excel。题域是 Android 刷题 App，负责一条龙备考链中的练习与共享。"
+>
   <Header slot="header" />
 
   <section class="mx-auto max-w-5xl px-4 py-16">
-    <div class="max-w-4xl">
-      <p class="text-sm font-medium uppercase tracking-wide text-blue-600">QuestSphere</p>
+    <div class="max-w-3xl">
+      <p class="text-sm font-medium uppercase tracking-wide text-blue-600">QuestSphere · 题域</p>
       <h1 class="mt-3 text-balance text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
-        题域 — 导入即练，发现共享题库
+        备考一条龙里的刷题与共享层
       </h1>
       <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-        从出题到刷题的一条龙练习工具：导入 Excel 即可开练，还能发现他人分享的公开题库。
+        先刷官方精选题库，再决定是否导入自己的 Excel。完整刷题与订阅在 Android App 内完成。
       </p>
-      <div class="mt-8 flex flex-wrap gap-4">
+      <div class="mt-8 flex flex-wrap items-center gap-3">
         <a
           href="/packs"
-          class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+          class="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
         >
-          浏览公开包
+          体验官方精选题库
+        </a>
+        <a
+          href="#ecosystem"
+          class="rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-600"
+        >
+          了解一条龙服务
         </a>
         <a
           href="/download"
-          class="rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-600"
+          class="px-2 py-3 text-sm font-medium text-slate-500 transition hover:text-blue-600"
         >
-          了解 Android App
-        </a>
-        <a
-          href="/docs"
-          class="rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-600"
-        >
-          查看导入文档
+          下载 App →
         </a>
       </div>
-      <p class="mt-6 text-sm text-slate-500">
-        联系开发者：
+    </div>
+  </section>
+
+  <section id="ecosystem" class="scroll-mt-20 border-y border-slate-200 bg-white">
+    <div class="mx-auto max-w-5xl px-4 py-14">
+      <h2 class="text-2xl font-bold text-slate-900">一条龙备考服务链</h2>
+      <p class="mt-3 max-w-3xl text-slate-600 leading-7">
+        从 PDF 整理到个性化出题，再到刷题沉淀与公开包共享——题域负责其中<strong>「练」</strong>这一环。
+        前段 PDF 可搜索化、DeepTutor 部署与定制出题等服务，欢迎联系咨询。
+      </p>
+
+      <ol class="mt-8 flex flex-wrap gap-3">
+        {
+          ecosystemSteps.map((step, index) => (
+            <li class="flex items-center gap-3">
+              <span
+                class:list={[
+                  'rounded-full px-3 py-1 text-sm font-medium',
+                  index === 3
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-blue-50 text-blue-700',
+                ]}
+              >
+                {index + 1}. {step}
+              </span>
+              {index < ecosystemSteps.length - 1 && <span class="text-slate-300">→</span>}
+            </li>
+          ))
+        }
+      </ol>
+
+      <p class="mt-8 text-sm text-slate-500">
+        前段服务（PDF / DeepTutor / 定制出题）咨询：
         <a href="mailto:jamesjen627@gmail.com" class="font-medium text-blue-600 hover:text-blue-700">
           jamesjen627@gmail.com
         </a>
@@ -60,28 +94,10 @@ const pipeline = [
     </div>
   </section>
 
-  <section class="border-y border-slate-200 bg-white">
-    <div class="mx-auto max-w-5xl px-4 py-12">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">一条龙链路</h2>
-      <p class="mt-2 text-sm text-slate-500">从资料整理到刷题沉淀，题域负责「练」这一环</p>
-      <ol class="mt-6 flex flex-wrap gap-3">
-        {
-          pipeline.map((step, index) => (
-            <li class="flex items-center gap-3">
-              <span class="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
-                {index + 1}. {step}
-              </span>
-              {index < pipeline.length - 1 && <span class="text-slate-300">→</span>}
-            </li>
-          ))
-        }
-      </ol>
-    </div>
-  </section>
-
   <section class="mx-auto max-w-5xl px-4 py-16">
-    <h2 class="text-2xl font-bold text-slate-900">核心能力</h2>
-    <ul class="mt-8 grid gap-4 sm:grid-cols-2">
+    <h2 class="text-xl font-semibold text-slate-800">核心能力</h2>
+    <p class="mt-2 text-sm text-slate-500">已了解题域定位？以下是 App 内主要功能</p>
+    <ul class="mt-6 grid gap-4 sm:grid-cols-2">
       {
         features.map((feature) => (
           <li class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">{feature}</li>

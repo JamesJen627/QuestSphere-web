@@ -2,7 +2,7 @@
 
 name: 官网仓库策略
 
-overview: 推荐 Phase 2.8 官网作为**独立 npm 项目/独立仓库**，部署到 Vercel 或 Cloudflare Pages；Supabase（schema、migrations、Edge Functions）继续留在当前 workbench，Web 只通过 anon REST + 已有 Edge Functions 对接。本文档含 **workbench 项目背景**，供官网开发 Agent 快速上手。
+overview: 推荐 Phase 2.8 官网作为**独立 npm 项目/独立仓库**（本仓库 QuestSphere-web），部署到 Vercel 或 Cloudflare Pages；Supabase 继续留在 workbench，Web 只通过 anon REST 对接。**官网 IA、主转化与切片以 `docs/website-decisions.md` 为准**；本文档侧重 workbench 背景与 API 边界。
 
 todos:
 
@@ -10,17 +10,35 @@ todos:
 
     content: 新建 questsphere-web（Astro + Vercel/CF），配置 PUBLIC_SUPABASE_URL/ANON_KEY
 
-    status: pending
+    status: completed
 
   - id: landing-docs
 
-    content: 落地页 + /docs（导入模板、FAQ、一条龙说明）+ APK 下载链
+    content: 落地页 + /docs + /download + /packs 骨架页
+
+    status: completed
+
+  - id: homepage-p0a
+
+    content: 首页 P0-a：Hero CTA 层级 + #ecosystem（见 website-decisions §2.1、§6.1）
 
     status: pending
 
   - id: pack-preview
 
-    content: /pack/[packId] 只读预览（public_packs REST，前 3 题 + 版本元数据）
+    content: /pack/[packId] 预览（前 3 题含选项+解析 + onboarding，见 website-decisions §5.4）
+
+    status: pending
+
+  - id: featured-pack-content
+
+    content: 首包 10～15 题上架 Supabase（tags official+featured+demo）
+
+    status: pending
+
+  - id: packs-featured-section
+
+    content: /packs 官方精选分区 + 首页精选卡片（依赖 featured 包）
 
     status: pending
 
@@ -90,7 +108,7 @@ flowchart LR
 - **DeepTutor**：自研出题补丁（题域仓内无代码）；官网文档可链到说明/模板
 - **题域 App**：本 workbench；本地 Room + 可选 Supabase 云
 
-官网落地页应讲清这条链，并引导：**下载 App → 导入 Excel → 发现/订阅公开包**。
+官网落地页应讲清这条链。**主转化路径以 [`docs/website-decisions.md`](../website-decisions.md) 为准**：体验官方精选包 → 预览 → 文档 → 下载 App（非「先下载再导入」）。
 
 ### 3. App 核心能力（已实现，官网勿重复做 Web 版）
 
@@ -186,11 +204,19 @@ Authorization: Bearer {ANON_KEY}
 
 ```
 
-**列表公开包**（发现页/catalog，网站可选做 `/packs` 索引）：
+**列表公开包**（发现页/catalog，网站 `/packs`）：
 
 ```
 
 GET /rest/v1/public_packs?select=pack_id,title,description,tags,author_nickname,question_count,version,updated_at&order=updated_at.desc&limit=50
+
+```
+
+**官方精选区**（`/packs` 置顶，见 [`website-decisions.md` §5.3](../website-decisions.md#53-tag-约定public_packstags)）：
+
+```
+
+GET /rest/v1/public_packs?select=pack_id,title,description,tags,author_nickname,question_count,version,updated_at&tags=cs.{featured}&order=updated_at.desc&limit=10
 
 ```
 
@@ -246,7 +272,7 @@ GET /rest/v1/public_packs?pack_id=eq.{packId}&select=*&limit=1
 
 ```
 
-预览页：**展示前 3 题题干**（App 用 `stripMarkdownForPreview` 去 Markdown；Web 可用简单 strip 或 `marked` 渲染），展示 `version`、题数、作者、标签；CTA：**「在题域 App 中订阅」**（链到 `/download`）。
+预览页：**展示前 3 题**（题干 + 选项 + 解析，只读、不判题、不展示正确答案；题干去 Markdown 对齐 App `stripMarkdownForPreview`），展示 `version`、题数、作者、标签；固定 onboarding 模块见 [`website-decisions.md` §5.4](../website-decisions.md#54-预览页固定模块每个-featured-包)；CTA：**继续逛精选包**（主）/ 下载 App（次）。
 
 **平台公告（可选 /news）**：
 
@@ -271,7 +297,7 @@ RLS：仅 `select` 对 anon 开放`expires_at` 未过期或为空。
 
 - App 支持 **简体中文 / 繁体中文 / English**`valuesvalues-zh-rCNvalues-zh-rTW`）
 - 官网 v1 建议：**默认简体中文**，结构预留 i18n；繁体/英文可 Phase 2.8+ 补
-- 产品自称：**题域**；副标题可强调「导入即练、发现共享题库」
+- 产品自称：**题域**；官网 v1 副标题方向见 [`website-decisions.md` §6.3](../website-decisions.md#63-全站关键文案header--footer--cta)：先体验精选题库，再导入自己的 Excel
 - 主色可参考 App `[PrimaryBlue](E:\QuestSphere\workbench\app\src\main\java\com\questsphere\domain\ui\theme)`（开发时从 Compose theme 取色值）
 
 
@@ -286,20 +312,25 @@ RLS：仅 `select` 对 anon 开放`expires_at` 未过期或为空。
 
 ### 9. 给官网 Agent 的交付清单（Phase 2.8 v1）
 
-1. 落地页：一条龙 + 功能概览 + 下载 CTA
-2. `/docs`：Excel 导入说明、DeepTutor 导出约定、FAQ、更新日志
-3. `/download`：APK（GitHub Release 或静态链接；内测期可仅 debug/release 说明）
-4. `/pack/[packId]`：Supabase 只读预览 + 分享 OG meta（title/description）
-5. 环境变量`PUBLIC_SUPABASE_URLPUBLIC_SUPABASE_ANON_KEY`（Vercel/CF 控制台）
-6. 不在 v1 做：登录、刷题、付费、直接写库
+> 实施顺序与切片详见 [`docs/website-decisions.md` §7](../website-decisions.md#7-开发切片)。
+
+1. **`/`** — P0-a：Hero 主/次/第三 CTA + `#ecosystem`；P1：嵌入精选包卡片（依赖 featured 包）
+2. **`/packs`** — 官方精选置顶（`tags` 含 `featured`）+ 次级全量/搜索
+3. **`/pack/[packId]`** — 3 题预览（选项+解析）+ onboarding + OG meta
+4. **`/docs`** — Excel 导入、DeepTutor 导出、发现/订阅 FAQ（P1 调整信息顺序）
+5. **`/download`** — 次级入口；内测期说明与预览页文案一致
+6. 环境变量 `PUBLIC_SUPABASE_URL`、`PUBLIC_SUPABASE_ANON_KEY`（Vercel/CF 控制台）
+7. 不在 v1 做：登录、Web 刷题/答题、付费、直接写库、`/admin`
 
 
 
 ### 10. 相关文档与计划（延伸阅读）
 
-- 路线图总览`C:\Users\36739\.cursor\plans\题域_v2_路线图_181946b1.plan.md`
-- 开发者运维与公告`C:\Users\36739\.cursor\plans\开发者运维与公告_1bb33a6b.plan.md`
-- workbench README`[README.md](E:\QuestSphere\workbench\README.md)`（偏 Android 构建，网站 Agent 可略读）
+- **官网战略与 IA（优先读）**：[`docs/website-decisions.md`](../website-decisions.md)
+- 本仓库 README：[`README.md`](../../README.md)
+- 路线图总览：`C:\Users\36739\.cursor\plans\题域_v2_路线图_181946b1.plan.md`
+- 开发者运维与公告：`C:\Users\36739\.cursor\plans\开发者运维与公告_1bb33a6b.plan.md`
+- workbench README：[`README.md`](E:\QuestSphere\workbench\README.md)（偏 Android 构建，网站 Agent 可略读）
 
 ---
 
@@ -401,13 +432,14 @@ flowchart LR
 
 ### 新建独立仓库（建议名 `questsphere-web` 或 `questsphere-site`）
 
-**Phase 2.8 v1 页面（1–2 周量级）：**
+**Phase 2.8 v1 页面（1–2 周量级，细节见 `website-decisions.md`）：**
 
-1. **/** — 落地页（一条龙：PDF → DeepTutor → 题域）
-2. **/docs** — 导入模板说明、FAQ、更新日志（Markdown 即可）
-3. **/download** — APK 下载（链到 GitHub Release 或对象存储）
-4. **/pack/[packId]** — 公开包预览（只读 Supabase `public_packs`，预览前 3 题 + 元数据）
-5. **（可选 P2）/admin** — 复用已有 6 个 `admin-`* Edge Functions + `x-device-id`（大屏审核，与 App 开发者页二选一）
+1. **/** — 生态叙事 + 主 CTA「体验官方精选题库」+ `#ecosystem`
+2. **/packs** — 官方精选区 + 次级全量/搜索
+3. **/pack/[packId]** — 3 题预览（选项+解析）+ onboarding
+4. **/docs** — 导入模板说明、FAQ、发现/订阅说明
+5. **/download** — 次级入口（内测期引导文案）
+6. **（可选 P2）/admin** — 复用已有 6 个 `admin-*` Edge Functions + `x-device-id`
 
 **环境变量（Vercel/CF 控制台配置，勿提交 git）：**
 
@@ -469,12 +501,13 @@ flowchart LR
 
 
 
-## 建议实施顺序（确认后执行 2.8）
+## 建议实施顺序（与 `website-decisions.md` §7 对齐）
 
-1. 新建 `questsphere-web` 仓库 + Astro 脚手架 + Vercel/CF 连 Git
-2. 落地页 + `/docs` + APK 下载链接
-3. `/pack/[packId]` 接 Supabase anon REST
-4. workbench README 增加「官网仓库」链接；APK Release 流程写进 docs
-5. （可选）同项目加 `/admin`，复用 Edge Functions
+1. ~~新建 `questsphere-web` 仓库 + Astro 脚手架 + Vercel/CF 连 Git~~（已完成）
+2. ~~落地页骨架 + `/docs` + `/download` + `/packs`~~（已完成）
+3. **进行中** — 首页 P0-a（CTA + `#ecosystem`）；首包 10～15 题上架
+4. `/packs` 精选分区 + `/pack/[id]` 预览（选项+解析）+ onboarding
+5. workbench README 增加「官网仓库」链接；APK Release 流程写进 docs
+6. （可选 P2）同项目加 `/admin`，复用 Edge Functions
 
 **预估**：v1 静态站 + 预览页约 **2–4 天**；Web admin 另计 **3–5 天**（可与 App 开发者页并行，API 已就绪）。

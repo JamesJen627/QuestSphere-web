@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
+  <url>
+    <loc>https://questsphere-web.vercel.app/pack/00c58be7-94ce-4a95-b6e6-3341472d3775</loc>
+    <changefreq>weekly</changefreq>
+  </url>
 </urlset>

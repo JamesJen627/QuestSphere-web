@@ -1,0 +1,40 @@
+{
+  "agentfile": 1,
+  "installs": [
+    {
+      "slug": "design-ui-designer",
+      "tool": "cursor",
+      "projectPath": "D:\\QuestSphere-web"
+    },
+    {
+      "slug": "design-ux-researcher",
+      "tool": "cursor",
+      "projectPath": "D:\\QuestSphere-web"
+    },
+    {
+      "slug": "engineering-rapid-prototyper",
+      "tool": "cursor",
+      "projectPath": "D:\\QuestSphere-web"
+    },
+    {
+      "slug": "engineering-devops-automator",
+      "tool": "cursor",
+      "projectPath": "D:\\QuestSphere-web"
+    },
+    {
+      "slug": "engineering-frontend-developer",
+      "tool": "cursor",
+      "projectPath": "D:\\QuestSphere-web"
+    },
+    {
+      "slug": "engineering-sre",
+      "tool": "cursor",
+      "projectPath": "D:\\QuestSphere-web"
+    },
+    {
+      "slug": "testing-api-tester",
+      "tool": "cursor",
+      "projectPath": "D:\\QuestSphere-web"
+    }
+  ]
+}
